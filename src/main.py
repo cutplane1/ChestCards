@@ -33,15 +33,24 @@ class Card:
 
 class CardFactory:
     def __init__(self) -> None:
-        self.Clubs_texture = load_texture(".\\graphics\\Clubs.png")
-        self.Spades_texture = load_texture(".\\graphics\\Spades.png")
-        self.Hearts_texture = load_texture(".\\graphics\\Hearts.png")
-        self.Diamonds_texture = load_texture(".\\graphics\\Diamonds.png")
+        self.Clubs_texture = load_texture(".\\textures\\Clubs.png")
+        self.Spades_texture = load_texture(".\\textures\\Spades.png")
+        self.Hearts_texture = load_texture(".\\textures\\Hearts.png")
+        self.Diamonds_texture = load_texture(".\\textures\\Diamonds.png")
 
-    def spawn_card(self, suit, rank, x, y) -> Card:
+    def spawn_card(self, suit: Suit, rank: int, x: int, y: int) -> Card:
         t = (eval("self.{}_texture".format(suit.name)))
 
         return Card(suit, rank, x, y, t)
+
+
+class Deck:
+    def __init__(self) -> None:
+        self.cells = {}
+    
+    def place_card(card: Card) -> None:
+        pass
+    # def in_this_cell(cell: int, card: Card) -> None:
 
 
 # card spawn
