@@ -39,14 +39,7 @@ class CardFactory:
         self.Diamonds_texture = load_texture(".\\graphics\\Diamonds.png")
 
     def spawn_card(self, suit, rank, x, y) -> Card:
-        if suit.name == "Clubs":
-            t = self.Clubs_texture
-        elif suit.name == "Spades":
-            t = self.Spades_texture
-        elif suit.name == "Hearts":
-            t = self.Hearts_texture
-        elif suit.name == "Diamonds":
-            t = self.Diamonds_texture
+        t = (eval("self.{}_texture".format(suit.name)))
 
         return Card(suit, rank, x, y, t)
 
