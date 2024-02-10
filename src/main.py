@@ -7,10 +7,10 @@ screen = pygame.display.set_mode((640, 240))
 r = pygame.Rect(0, 0, 20, 20)
 
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEMOTION:
-            print(event.pos)
+    pygame.draw.rect(screen, (255,0,0), r)
+    pygame.display.flip()
 
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
