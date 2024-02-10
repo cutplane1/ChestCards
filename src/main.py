@@ -1,44 +1,75 @@
-import pygame
+from pyray import *
+import random
+from internal import Suit 
 
-# class Card:
-#     def __init__(self, suit, rank, x, y) -> None:
-#         self.suit = suit
-#         self.rank = rank
-#         self.x = x
-#         self.y = y
-#         self.rect = pygame.Rect(self.x, self.y, 50, 70)
-#         self.num_font = pygame.font.SysFont('arial', 20)
-#         self.num = self.num_font.render(str(rank), True, (0, 255, 0))
+init_window(800, 600, 'demo')
 
-#         self.surface = pygame.Surface((50, 70))
+set_target_fps(60)
 
-#     def draw(self) -> None:
-#         self.surface.fill((255, 255, 255))
-#         self.surface.blit(self.num, (0,0))
-
-
-pygame.init()
-
-
-
-screen = pygame.display.set_mode((800, 600))
-
-surface = pygame.Surface((50, 70))
-num_font = pygame.font.SysFont('arial', 20)
-num = num_font.render("8", True, (0, 0, 0))
-
-x = 0
-
-while True:
-    surface.fill((255,255,255))
-    surface.blit(num, (0,0))
-    screen.blit(surface, (x, 0))
-    x = 100
-    pygame.display.flip()
-
+class draw:
+    def __enter__(self) -> None:
+        begin_drawing()
     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        end_drawing()
 
+class Card:
+    def __init__(self, suit: Suit, rank: int, x: int, y: int, texture: Texture) -> None:
+        self.suit = suit
+        self.rank = str(rank)
+        self.x = x
+        self.y = y
+        self.texture = texture
+        
+        if suit.name == "Clubs" or suit.name == "Spades":
+            self.color = BLACK
+        elif suit.name == "Hearts" or suit.name == "Diamonds":
+            self.color = RED
+
+    def draw(self) -> None:
+        draw_rectangle(self.x, self.y, 50, 70, WHITE)
+        draw_text(self.rank, self.x + 2, self.y + 2, 20, self.color)
+        draw_texture(self.texture, self.x + 30, self.y + 50, WHITE)
+
+class CardFactory:
+    def __init__(self) -> None:
+        self.Clubs_texture = load_texture(".\\graphics\\Clubs.png")
+        self.Spades_texture = load_texture(".\\graphics\\Spades.png")
+        self.Hearts_texture = load_texture(".\\graphics\\Hearts.png")
+        self.Diamonds_texture = load_texture(".\\graphics\\Diamonds.png")
+
+    def spawn_card(self, suit, rank, x, y) -> Card:
+        if suit.name == "Clubs":
+            t = self.Clubs_texture
+        elif suit.name == "Spades":
+            t = self.Spades_texture
+        elif suit.name == "Hearts":
+            t = self.Hearts_texture
+        elif suit.name == "Diamonds":
+            t = self.Diamonds_texture
+
+        return Card(suit, rank, x, y, t)
+
+
+# card spawn
+cards = []
+factory = CardFactory()
+
+for i in range(2, 9 + 1):
+    cards.append(factory.spawn_card(random.choice(list(Suit)), i, i * 10 * 6 + 50, 500))
+
+while not window_should_close():
+
+    with draw():
+        clear_background(BLACK)
+
+        draw_rectangle(100, 10, 600, 100, BROWN)
+        draw_text("enemy deck", 350, 50, 24, WHITE)
+
+        draw_circle(500, 300, 60, GRAY)
+        draw_text("card pack", 460, 290, 16, WHITE)
+        
+        for c in cards:
+            c.draw()
+
+close_window()
