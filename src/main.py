@@ -4,7 +4,7 @@ from internal import Suit
 
 init_window(800, 600, 'demo')
 
-set_target_fps(60)
+set_target_fps(120)
 
 class draw:
     def __enter__(self) -> None:
@@ -48,6 +48,8 @@ class Deck:
     def __init__(self, factory: CardFactory) -> None:
         self.factory = factory
         self.cells = {}
+        self.i = 0
+        self.last_cell = 1
     
     def place_card(card: Card) -> None:
         pass
@@ -57,23 +59,38 @@ class Deck:
         pass
 
     def debug_init(self, cell: int):
+        if cell != self.last_cell:
+            self.i = 0
+            self.last_cell = cell
+        self.i = self.i + 50
         try:
-            self.cells[cell].append(self.factory.spawn_card(Suit.random(), 7, 100, 100))
+            self.cells[cell].append(self.factory.spawn_card(Suit.random(), 69, 100 * cell, self.i))
         except KeyError:
-            self.cells[cell] = [self.factory.spawn_card(Suit.random(), 7, 100, 100)]
-
-
+            self.cells[cell] = [self.factory.spawn_card(Suit.random(), 69, 100 * cell, self.i)]
 
 
 
 # card spawn
 # cards = []
+
 factory = CardFactory()
 
 deck = Deck(factory)
 deck.debug_init(1)
 deck.debug_init(1)
 deck.debug_init(1)
+deck.debug_init(1)
+deck.debug_init(1)
+
+deck.debug_init(2)
+deck.debug_init(2)
+deck.debug_init(2)
+
+deck.debug_init(3)
+deck.debug_init(3)
+deck.debug_init(3)
+deck.debug_init(3)
+
 # try:
 #     print(deck.cells[1])
 # except KeyError:
@@ -94,10 +111,10 @@ while not window_should_close():
 
         # draw_rectangle(100, 10, 600, 100, colors.BROWN)
         draw_text("enemy side", 0, 0, 24, colors.WHITE)
-        for d in deck.cells:
-            for i in deck.cells[d]:
-                i.draw()
 
+        for d in deck.cells:
+            for card in deck.cells[d]:
+                card.draw()
 
 
         # draw_circle(500, 300, 60, GRAY)
