@@ -6,6 +6,9 @@ init_window(800, 600, 'demo')
 
 set_target_fps(60)
 
+def log(s: any) -> None:
+    print("\033[92m" + "LOG: " + str(s) + "\033[0m")
+
 class draw:
     def __enter__(self) -> None:
         begin_drawing()
@@ -58,24 +61,38 @@ class Deck:
         # factory.spawn_card()
         pass
 
-    def debug_input(self, cell: int):
+    def debug_input(self, cell: int) -> None:
         if cell != self.last_cell:
             self.i = 0
             self.last_cell = cell
         self.i = self.i + 30
+        sp = self.factory.spawn_card(Suit.random(), str(cell), 70 * cell, self.i + 400)
         try:
-            self.cells[cell].append(self.factory.spawn_card(Suit.random(), "69", 70 * cell, self.i + 400))
+            self.cells[cell].append(sp)
         except KeyError:
-            self.cells[cell] = [self.factory.spawn_card(Suit.random(), "69", 70 * cell, self.i + 400)]
+            self.cells[cell] = [sp]
     
     def multi_debug_input(self, cell: int, t: int):
         for _ in range(0, t):
             self.debug_input(cell)
 
+    def init_spawn(self) -> None:
+        pass
+
+    def find_cell_by_rank(self, rank: str) -> int|None:
+        for cell_id in self.cells:
+            for card in self.cells[cell_id]:
+                if card.rank == rank:
+                    return cell_id
+                else:
+                    end = True
+        if end:
+            return None
+
 
 factory = CardFactory()
-
 deck = Deck(factory)
+
 deck.multi_debug_input(1, 4)
 deck.multi_debug_input(2, 4)
 deck.multi_debug_input(3, 4)
@@ -86,6 +103,9 @@ deck.multi_debug_input(7, 4)
 deck.multi_debug_input(8, 4)
 deck.multi_debug_input(9, 4)
 
+# print(deck.cells[4])
+
+log(deck.find_cell_by_rank("K"))
 
 while not window_should_close():
 
