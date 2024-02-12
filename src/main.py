@@ -1,10 +1,10 @@
 from pyray import *
-from raylib import colors
+
 from internal import Suit 
 
 init_window(800, 600, 'demo')
 
-set_target_fps(120)
+set_target_fps(60)
 
 class draw:
     def __enter__(self) -> None:
@@ -14,22 +14,22 @@ class draw:
         end_drawing()
 
 class Card:
-    def __init__(self, suit: Suit, rank: int, x: int, y: int, texture: Texture) -> None:
+    def __init__(self, suit: Suit, rank: str, x: int, y: int, texture: Texture) -> None:
         self.suit = suit
-        self.rank = str(rank)
+        self.rank = rank
         self.x = x
         self.y = y
         self.texture = texture
         
         if suit.name == "Clubs" or suit.name == "Spades":
-            self.color = colors.BLACK
+            self.color = BLACK
         elif suit.name == "Hearts" or suit.name == "Diamonds":
-            self.color = colors.RED
+            self.color = RED
 
     def draw(self) -> None:
         draw_rectangle(self.x, self.y, 50, 70, WHITE)
         draw_text(self.rank, self.x + 2, self.y + 2, 20, self.color)
-        draw_texture(self.texture, self.x + 30, self.y + 50, colors.WHITE)
+        draw_texture(self.texture, self.x + 30, self.y + 50, WHITE)
 
 class CardFactory:
     def __init__(self) -> None:
@@ -38,7 +38,7 @@ class CardFactory:
         self.Hearts_texture = load_texture(".\\textures\\Hearts.png")
         self.Diamonds_texture = load_texture(".\\textures\\Diamonds.png")
 
-    def spawn_card(self, suit: Suit, rank: int, x: int, y: int) -> Card:
+    def spawn_card(self, suit: Suit, rank: str, x: int, y: int) -> Card:
         t = (eval("self.{}_texture".format(suit.name)))
 
         return Card(suit, rank, x, y, t)
@@ -58,15 +58,19 @@ class Deck:
         # factory.spawn_card()
         pass
 
-    def debug_init(self, cell: int):
+    def debug_input(self, cell: int):
         if cell != self.last_cell:
             self.i = 0
             self.last_cell = cell
-        self.i = self.i + 50
+        self.i = self.i + 30
         try:
-            self.cells[cell].append(self.factory.spawn_card(Suit.random(), 69, 100 * cell, self.i))
+            self.cells[cell].append(self.factory.spawn_card(Suit.random(), "69", 70 * cell, self.i + 400))
         except KeyError:
-            self.cells[cell] = [self.factory.spawn_card(Suit.random(), 69, 100 * cell, self.i)]
+            self.cells[cell] = [self.factory.spawn_card(Suit.random(), "69", 70 * cell, self.i + 400)]
+    
+    def multi_debug_input(self, cell: int, t: int):
+        for _ in range(0, t):
+            self.debug_input(cell)
 
 
 
@@ -76,28 +80,22 @@ class Deck:
 factory = CardFactory()
 
 deck = Deck(factory)
-deck.debug_init(1)
-deck.debug_init(1)
-deck.debug_init(1)
-deck.debug_init(1)
-deck.debug_init(1)
-
-deck.debug_init(2)
-deck.debug_init(2)
-deck.debug_init(2)
-
-deck.debug_init(3)
-deck.debug_init(3)
-deck.debug_init(3)
-deck.debug_init(3)
+deck.multi_debug_input(1, 4)
+deck.multi_debug_input(2, 4)
+deck.multi_debug_input(3, 4)
+deck.multi_debug_input(4, 4)
+deck.multi_debug_input(5, 4)
+deck.multi_debug_input(6, 4)
+deck.multi_debug_input(7, 4)
+deck.multi_debug_input(8, 4)
+deck.multi_debug_input(9, 4)
 
 # try:
 #     print(deck.cells[1])
 # except KeyError:
 #     deck.cells[1] = []
 
-print(deck.cells)
-
+# print(deck.cells)
 
 # deck.in_this_cell(1, factory.spawn_card(random.choice(list(Suit)), i, i * 10 * 6 + 50, 500)))
 
@@ -110,8 +108,8 @@ while not window_should_close():
         clear_background(BLACK)
 
         # draw_rectangle(100, 10, 600, 100, colors.BROWN)
-        draw_text("enemy side", 0, 0, 24, colors.WHITE)
-
+        # draw_text("enemy side", 0, 0, 24, colors.WHITE)
+        draw_fps(0,0)
         for d in deck.cells:
             for card in deck.cells[d]:
                 card.draw()
