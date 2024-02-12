@@ -73,10 +73,6 @@ class Deck:
             self.debug_input(cell)
 
 
-
-# card spawn
-# cards = []
-
 factory = CardFactory()
 
 deck = Deck(factory)
@@ -90,35 +86,14 @@ deck.multi_debug_input(7, 4)
 deck.multi_debug_input(8, 4)
 deck.multi_debug_input(9, 4)
 
-# try:
-#     print(deck.cells[1])
-# except KeyError:
-#     deck.cells[1] = []
-
-# print(deck.cells)
-
-# deck.in_this_cell(1, factory.spawn_card(random.choice(list(Suit)), i, i * 10 * 6 + 50, 500)))
-
-# for i in range(2, 9 + 1):
-    # cards.append(factory.spawn_card(random.choice(list(Suit)), i, i * 10 * 6 + 50, 500))
 
 while not window_should_close():
 
     with draw():
         clear_background(BLACK)
-
-        # draw_rectangle(100, 10, 600, 100, colors.BROWN)
-        # draw_text("enemy side", 0, 0, 24, colors.WHITE)
         draw_fps(0,0)
         for d in deck.cells:
             for card in deck.cells[d]:
                 card.draw()
-
-
-        # draw_circle(500, 300, 60, GRAY)
-        # draw_text("card pack", 460, 290, 16, colors.WHITE)
-        
-        # for c in cards:
-        #     c.draw()
 
 close_window()
