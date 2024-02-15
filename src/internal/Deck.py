@@ -8,7 +8,7 @@ class Deck:
         self.i = 0
         self.last_cell = 1
 
-    def in_this_cell(cell: int, card: internal.Card) -> None:
+    def in_this_cell(self, cell: int, card: internal.Card) -> None:
         pass
 
     def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
@@ -40,10 +40,10 @@ class Deck:
             return None
         
     def init_game(self):
-        for d in range(7):
+        for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
-            for i in range(0, random.randint(0, 2)):
-                self.spawn_card_to_cell(rand_rank, str(rand_rank))
+            for _ in range(0, random.randint(0, 2)):
+                self.spawn_card_to_cell(rand_rank, rand_rank)
 
 
     def draw_cards(self):
