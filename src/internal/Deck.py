@@ -7,13 +7,18 @@ class Deck:
         self.cells = {}
         self.i = 0
         self.last_cell = 1
+        self.y_offset = 400
 
 
     def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
         if cell != self.last_cell:
-            self.i = 0
             self.last_cell = cell
-        self.i = self.i + 30
+            self.i = 0
+        try:
+            self.i = len(self.cells[cell]) * 30
+        except KeyError:
+            self.i = 0
+
         sp = self.factory.spawn_card(internal.Suit.random(), rank, 70 * cell, self.i + 400)
         try:
             self.cells[cell].append(sp)
@@ -27,7 +32,8 @@ class Deck:
                 if card.rank == rank:
                     return cell_id
                 else:
-                    end = True
+                    end = False
+                    break
         if end:
             return None
         

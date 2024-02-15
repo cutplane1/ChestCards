@@ -6,6 +6,8 @@ class CardFactory:
         self.Spades_texture = internal.pyray.load_texture(".\\textures\\Spades.png")
         self.Hearts_texture = internal.pyray.load_texture(".\\textures\\Hearts.png")
         self.Diamonds_texture = internal.pyray.load_texture(".\\textures\\Diamonds.png")
+        if self.Diamonds_texture.format == 0 or self.Spades_texture.format == 0 or self.Hearts_texture.format == 0 or self.Clubs_texture.format == 0:
+            raise internal.TextureOpenFailedException
 
     def spawn_card(self, suit: internal.Suit, rank: str|int, x: int, y: int) -> internal.Card:
         t = (eval("self.{}_texture".format(suit.name)))
