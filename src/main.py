@@ -23,17 +23,14 @@ class Client:
 
 while not window_should_close():
     if debug_button_is_clicked:
-        deck.spawn_card_to_cell(2, 69)
+        deck.take_one_random_card()
         deck.is_card_pack_completed()
     if debug2_button_is_clicked:
-        try:
-            log(deck.cells[2])
-        except KeyError:
-            pass
-
+        pass
     begin_drawing()
     clear_background(BLACK)
     draw_fps(0,0)
+    draw_text(str(deck.score), 200, 200, 16, WHITE)
     debug_button_is_clicked = gui_button(debug_button_rect, "d")
     debug2_button_is_clicked = gui_button(debug2_button_rect, "2")
     deck.draw_cards()
