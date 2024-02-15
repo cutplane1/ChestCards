@@ -8,8 +8,7 @@ init_window(800, 600, 'demo')
 set_target_fps(60)
 
 deck = Deck(CardFactory())
-deck2 = Deck(CardFactory())
-log("INIT: OK")
+log("OK")
 deck.init_game()
 # deck.spawn_card_to_cell(2, 4)
 
@@ -19,7 +18,7 @@ debug_button_is_clicked = 0
 debug2_button_is_clicked = 0
 
 class Client:
-    def take_cards():
+    def take_cards(self):
         pass
 
 while not window_should_close():
