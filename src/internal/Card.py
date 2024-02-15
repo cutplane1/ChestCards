@@ -1,9 +1,9 @@
 import internal
 
 class Card:
-    def __init__(self, suit: internal.Suit, rank: str, x: int, y: int, texture: internal.pyray.Texture) -> None:
+    def __init__(self, suit: internal.Suit, rank: str|int, x: int, y: int, texture: internal.pyray.Texture) -> None:
         self.suit = suit
-        self.rank = rank
+        self.rank = str(rank)
         self.x = x
         self.y = y
         self.texture = texture

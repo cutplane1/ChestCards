@@ -11,7 +11,7 @@ class Deck:
     def in_this_cell(cell: int, card: internal.Card) -> None:
         pass
 
-    def spawn_card_to_cell(self, cell: int, rank: str) -> None:
+    def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
         if cell != self.last_cell:
             self.i = 0
             self.last_cell = cell
@@ -29,7 +29,7 @@ class Deck:
     def get_card(self) -> None:
         pass
 
-    def find_cell_by_rank(self, rank: str) -> int|None:
+    def find_cell_by_rank(self, rank: str|int) -> int|None:
         for cell_id in self.cells:
             for card in self.cells[cell_id]:
                 if card.rank == rank:
