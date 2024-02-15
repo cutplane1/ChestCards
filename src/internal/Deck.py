@@ -8,8 +8,6 @@ class Deck:
         self.i = 0
         self.last_cell = 1
 
-    def in_this_cell(self, cell: int, card: internal.Card) -> None:
-        pass
 
     def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
         if cell != self.last_cell:
@@ -21,13 +19,7 @@ class Deck:
             self.cells[cell].append(sp)
         except KeyError:
             self.cells[cell] = [sp]
-    
-    def multi_debug_input(self, cell: int, t: int) -> None:
-        for _ in range(0, t):
-            self.spawn_card_to_cell(cell, "4") # debug number
 
-    def get_card(self) -> None:
-        pass
 
     def find_cell_by_rank(self, rank: str|int) -> int|None:
         for cell_id in self.cells:
