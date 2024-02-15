@@ -39,14 +39,21 @@ class Deck:
         if end:
             return None
         
-    def init_game(self):
+    def init_game(self) -> None:
         for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
             for _ in range(0, random.randint(0, 2)):
                 self.spawn_card_to_cell(rand_rank, rand_rank)
 
 
-    def draw_cards(self):
+    def draw_cards(self) -> None:
         for d in self.cells:
             for card in self.cells[d]:
                 card.draw()
+
+    def is_card_pack_completed(self) -> None:
+        for cell_id in self.cells:
+            if len(self.cells[cell_id]) >= 4:
+                self.i = 0
+                self.cells[cell_id] = []
+                print("yay")

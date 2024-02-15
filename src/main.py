@@ -15,7 +15,7 @@ debug_button_rect = Rectangle(100, 100, 30, 30)
 debug_button_is_clicked = 0
 
 while not window_should_close():
-
+    deck.is_card_pack_completed()
     if debug_button_is_clicked:
         deck.spawn_card_to_cell(4, 69)
     begin_drawing()
