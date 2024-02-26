@@ -73,4 +73,11 @@ class Deck:
             except KeyError:
                 a.append(cell_id)
         return a
+    
+    def all_cards(self) -> list[internal.Card]:
+        all = []
+        for d in self.cells:
+            all += self.cells[d]
+        
+        return all
 

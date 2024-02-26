@@ -13,3 +13,9 @@ class CardFactory:
         t = (eval("self.{}_texture".format(suit.name)))
 
         return internal.Card(suit, rank, x, y, t)
+    
+    def unload(self):
+        internal.pyray.unload_texture(self.Clubs_texture)
+        internal.pyray.unload_texture(self.Spades_texture)
+        internal.pyray.unload_texture(self.Hearts_texture)
+        internal.pyray.unload_texture(self.Diamonds_texture)

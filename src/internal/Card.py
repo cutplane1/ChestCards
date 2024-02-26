@@ -7,6 +7,7 @@ class Card:
         self.x = x
         self.y = y
         self.texture = texture
+        self.rectangle = internal.pyray.Rectangle(self.x, self.y, 50, 70)
         
         if suit.name == "Clubs" or suit.name == "Spades":
             self.color = internal.pyray.BLACK
@@ -14,6 +15,6 @@ class Card:
             self.color = internal.pyray.RED
 
     def draw(self) -> None:
-        internal.pyray.draw_rectangle(self.x, self.y, 50, 70, internal.pyray.WHITE)
+        internal.pyray.draw_rectangle_rec(self.rectangle, internal.pyray.WHITE)
         internal.pyray.draw_text(self.rank, self.x + 2, self.y + 2, 20, self.color)
         internal.pyray.draw_texture(self.texture, self.x + 30, self.y + 50, internal.pyray.WHITE)
