@@ -1,5 +1,5 @@
 def log(s: any) -> None:
-    print("\033[92m" + "LOG: " + str(s) + "\033[0m")
+    print("\033[92m" + "INFO: GENERAL: " + str(s) + "\033[0m")
 
 def get_main_py_directory():
     import os

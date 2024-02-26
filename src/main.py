@@ -8,7 +8,7 @@ init_window(800, 600, 'demo')
 set_target_fps(60)
 
 deck = Deck(CardFactory())
-log("OK")
+log("Deck initiated")
 # deck.init_game()
 deck.spawn_card_to_cell(2, 4)
 deck.spawn_card_to_cell(2, 5)
