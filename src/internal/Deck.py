@@ -7,13 +7,15 @@ class Deck:
         self.cells = {}
         self.i = 0
         self.last_cell = 1
-        self.y_offset = 400
+        self.y_offset = 50
         self.score = 0
         self.selected_card = False
         self.last_ct = (0, 0)
 
+        for i in range(1, 9 + 1):
+            self.cells[i] = []
 
-    def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
+    def card_to_cell(self, cell: int, sp: internal.Card) -> None:
         if cell != self.last_cell:
             self.last_cell = cell
             self.i = 0
@@ -21,12 +23,18 @@ class Deck:
             self.i = len(self.cells[cell]) * 30
         except KeyError:
             self.i = 0
-
-        sp = self.factory.spawn_card(internal.Suit.random(), rank, 70 * cell, self.i + 400)
         try:
+            sp.x = 70 * cell
+            sp.y = self.i + self.y_offset
+            sp.cell_temp = cell
             self.cells[cell].append(sp)
+            print(self.cells[cell])
         except KeyError:
             self.cells[cell] = [sp]
+
+
+    def generate_card(self, rank, cell) -> internal.Card:
+        return self.factory.spawn_card(internal.Suit.random(), rank, 70 * cell, self.i + self.y_offset)
 
 
     def find_cell_by_rank(self, rank: str|int) -> int|None:
@@ -39,12 +47,12 @@ class Deck:
         if end:
             return None
         
-    def init_game(self) -> None:
+    def starter_cards(self) -> None:
         # rework this
         for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
             for _ in range(0, random.randint(0, 2 + 1)):
-                self.spawn_card_to_cell(rand_rank, rand_rank)
+                self.card_to_cell(rand_rank, rand_rank)
 
 
     def draw_cards(self) -> None:
@@ -64,7 +72,7 @@ class Deck:
         cell = self.find_cell_by_rank(rand_rank)
         if cell == None:
             cell = random.choice(self.get_free_cells())
-        self.spawn_card_to_cell(cell, rand_rank)
+        self.card_to_cell(cell, rand_rank)
 
     def get_free_cells(self) -> list[int]:
         a = []
@@ -109,11 +117,20 @@ class Deck:
     def card_selection(self) -> None:
         if internal.pyray.is_mouse_button_pressed(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
             self.identify_card()
-    
-        # if internal.pyray.is_mouse_button_down(internal.pyray.MouseButton.MOUSE_BUTTON_RIGHT):
-        #     self.reset_selected_card()
 
         if internal.pyray.is_mouse_button_released(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
-            self.reset_selected_card()
+            if self.selected_card != False:
+                sc = self.selected_card
+                self.cells[sc.cell_temp].remove(sc)
+                cell = self.find_cell_by_ct(internal.pyray.get_mouse_position())
+                self.reset_selected_card()
+                self.card_to_cell(cell, sc)
+
+
+
     
         self.selected_card_follow_mouse()
+
+    def find_cell_by_ct(self, ct_v: internal.pyray.Vector2) -> int:
+        x = ct_v.x
+        return int(round(x/70))
