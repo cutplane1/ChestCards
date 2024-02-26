@@ -1,6 +1,7 @@
 from enum import Enum
 from random import choice
 
+
 class Suit(Enum):
     Clubs = 0
     Spades = 1

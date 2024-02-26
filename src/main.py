@@ -2,7 +2,7 @@ from internal import *
 
 pyray.change_directory(get_main_py_directory())
 
-pyray.init_window(800, 600, 'demo')
+pyray.init_window(800, 600, "demo")
 
 pyray.set_target_fps(60)
 
@@ -21,7 +21,7 @@ while not pyray.window_should_close():
 
     pyray.begin_drawing()
     pyray.clear_background(pyray.BLACK)
-    pyray.draw_fps(0,0)
+    pyray.draw_fps(0, 0)
     deck.draw_cards()
     pyray.end_drawing()
 

@@ -1,5 +1,6 @@
 import internal
 
+
 class Deck:
     def __init__(self, factory: internal.CardFactory) -> None:
         self.factory = factory
@@ -33,12 +34,12 @@ class Deck:
         except KeyError:
             self.cells[cell] = [sp]
 
-
     def generate_card(self, rank, cell) -> internal.Card:
-        return self.factory.spawn_card(internal.Suit.random(), rank, 70 * cell, self.i + self.y_offset)
+        return self.factory.spawn_card(
+            internal.Suit.random(), rank, 70 * cell, self.i + self.y_offset
+        )
 
-
-    def find_cell_by_rank(self, rank: str|int) -> int|None:
+    def find_cell_by_rank(self, rank: str | int) -> int | None:
         for cell_id in self.cells:
             for card in self.cells[cell_id]:
                 if card.rank == str(rank):
@@ -47,15 +48,15 @@ class Deck:
                     end = False
         if end:
             return None
-        
+
     def starter_cards(self) -> None:
         import random
+
         # rework this
         for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
             for _ in range(0, random.randint(0, 2 + 1)):
                 self.card_to_cell(rand_rank, rand_rank)
-
 
     def draw_cards(self) -> None:
         for d in self.cells:
@@ -85,18 +86,20 @@ class Deck:
             except KeyError:
                 a.append(cell_id)
         return a
-    
+
     def all_cards(self) -> list[internal.Card]:
         all = []
         for d in self.cells:
             all += self.cells[d]
-        
+
         return all
 
     def identify_card(self) -> None:
         rel_cards = []
         for card in self.all_cards():
-            if internal.pyray.check_collision_point_rec(internal.pyray.get_mouse_position(), card.rectangle):
+            if internal.pyray.check_collision_point_rec(
+                internal.pyray.get_mouse_position(), card.rectangle
+            ):
                 rel_cards.append(card)
         try:
             # ---------------------------------------------------------------------- under construct
@@ -116,28 +119,32 @@ class Deck:
         except AttributeError:
             pass
         self.selected_cards = False
-    
+
     def selected_card_follow_mouse(self) -> None:
         pass
 
     def card_selection(self) -> None:
         cell = self.find_cell_by_ct(internal.pyray.get_mouse_position())
 
-        if internal.pyray.is_mouse_button_pressed(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
+        if internal.pyray.is_mouse_button_pressed(
+            internal.pyray.MouseButton.MOUSE_BUTTON_LEFT
+        ):
             self.n_cell = cell
             self.identify_card()
 
-        if internal.pyray.is_mouse_button_released(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
-                if self.selected_cards != False:
-                    sc = self.selected_cards
-                    for card in sc:
-                        if self.n_cell != cell:
-                            self.cells[card.cell_temp].remove(card)
-                            self.reset_selected_card()
-                            self.card_to_cell(cell, card)
-                        else:
-                            card.x, card.y = int(card.ct_temp.x), int(card.ct_temp.y)
-                            self.reset_selected_card()
+        if internal.pyray.is_mouse_button_released(
+            internal.pyray.MouseButton.MOUSE_BUTTON_LEFT
+        ):
+            if self.selected_cards != False:
+                sc = self.selected_cards
+                for card in sc:
+                    if self.n_cell != cell:
+                        self.cells[card.cell_temp].remove(card)
+                        self.reset_selected_card()
+                        self.card_to_cell(cell, card)
+                    else:
+                        self.reset_selected_card()
+                        card.x, card.y = int(card.ct_temp.x), int(card.ct_temp.y)
 
         if self.selected_cards != False:
             self.now_ct.x = internal.pyray.get_mouse_x() - 30
@@ -148,4 +155,4 @@ class Deck:
 
     def find_cell_by_ct(self, ct_v: internal.pyray.Vector2) -> int:
         x = ct_v.x
-        return int(round(x/70))
+        return int(round(x / 70))
