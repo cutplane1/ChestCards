@@ -9,6 +9,7 @@ class Card:
         self.texture = texture
         self.rectangle = 0
         self.cell_temp = 0
+        self.ct_temp = internal.pyray.Vector2(0, 0)
         
         if suit.name == "Clubs" or suit.name == "Spades":
             self.color = internal.pyray.BLACK

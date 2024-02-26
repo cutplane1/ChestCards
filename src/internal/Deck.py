@@ -1,5 +1,4 @@
 import internal
-import random
 
 class Deck:
     def __init__(self, factory: internal.CardFactory) -> None:
@@ -9,8 +8,10 @@ class Deck:
         self.last_cell = 1
         self.y_offset = 50
         self.score = 0
-        self.selected_card = False
-        self.last_ct = (0, 0)
+        self.selected_cards = False
+        self.last_ct = internal.pyray.Vector2(0, 0)
+        self.now_ct = internal.pyray.Vector2(0, 0)
+        self.n_cell = 0
 
         for i in range(1, 9 + 1):
             self.cells[i] = []
@@ -28,7 +29,7 @@ class Deck:
             sp.y = self.i + self.y_offset
             sp.cell_temp = cell
             self.cells[cell].append(sp)
-            print(self.cells[cell])
+            # print(self.cells[cell])
         except KeyError:
             self.cells[cell] = [sp]
 
@@ -48,6 +49,7 @@ class Deck:
             return None
         
     def starter_cards(self) -> None:
+        import random
         # rework this
         for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
@@ -67,12 +69,12 @@ class Deck:
                 self.cells[cell_id] = []
                 self.score += 1
 
-    def take_one_random_card(self) -> None:
-        rand_rank = random.randint(1, 9)
-        cell = self.find_cell_by_rank(rand_rank)
-        if cell == None:
-            cell = random.choice(self.get_free_cells())
-        self.card_to_cell(cell, rand_rank)
+    # def take_one_random_card(self) -> None:
+    #     rand_rank = random.randint(1, 9)
+    #     cell = self.find_cell_by_rank(rand_rank)
+    #     if cell == None:
+    #         cell = random.choice(self.get_free_cells())
+    #     self.card_to_cell(cell, rand_rank)
 
     def get_free_cells(self) -> list[int]:
         a = []
@@ -97,39 +99,52 @@ class Deck:
             if internal.pyray.check_collision_point_rec(internal.pyray.get_mouse_position(), card.rectangle):
                 rel_cards.append(card)
         try:
-            self.last_ct = (rel_cards[-1].x, rel_cards[-1].y)
-            self.selected_card = rel_cards[-1]
+            # ---------------------------------------------------------------------- under construct
+            base_card = rel_cards[-1]
+            base_card_id = self.cells[base_card.cell_temp].index(base_card)
+            self.last_ct.x, self.last_ct.y = base_card.x, base_card.y
+            self.selected_cards = self.cells[base_card.cell_temp][base_card_id:]
+            for card in self.selected_cards:
+                card.ct_temp.x, card.ct_temp.y = card.x, card.y
+            # self.selected_cards = self.cells[base_card.cell_temp][self.cells[base_card.cell_temp:]
         except IndexError:
             pass
 
     def reset_selected_card(self) -> None:
         try:
-            self.selected_card.x, self.selected_card.y = self.last_ct
+            self.now_ct = self.last_ct
         except AttributeError:
             pass
-        self.selected_card = False
+        self.selected_cards = False
     
     def selected_card_follow_mouse(self) -> None:
-        if self.selected_card != False:
-            self.selected_card.x = internal.pyray.get_mouse_x() - 30
-            self.selected_card.y = internal.pyray.get_mouse_y() - 30
+        pass
 
     def card_selection(self) -> None:
+        cell = self.find_cell_by_ct(internal.pyray.get_mouse_position())
+
         if internal.pyray.is_mouse_button_pressed(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
+            self.n_cell = cell
             self.identify_card()
 
         if internal.pyray.is_mouse_button_released(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
-            if self.selected_card != False:
-                sc = self.selected_card
-                self.cells[sc.cell_temp].remove(sc)
-                cell = self.find_cell_by_ct(internal.pyray.get_mouse_position())
-                self.reset_selected_card()
-                self.card_to_cell(cell, sc)
+                if self.selected_cards != False:
+                    sc = self.selected_cards
+                    for card in sc:
+                        if self.n_cell != cell:
+                            self.cells[card.cell_temp].remove(card)
+                            self.reset_selected_card()
+                            self.card_to_cell(cell, card)
+                        else:
+                            card.x, card.y = int(card.ct_temp.x), int(card.ct_temp.y)
+                            self.reset_selected_card()
 
-
-
-    
-        self.selected_card_follow_mouse()
+        if self.selected_cards != False:
+            self.now_ct.x = internal.pyray.get_mouse_x() - 30
+            self.now_ct.y = internal.pyray.get_mouse_y() - 30
+            for card_id, card in enumerate(self.selected_cards):
+                card.x = int(self.now_ct.x)
+                card.y = int(self.now_ct.y) + card_id * 30
 
     def find_cell_by_ct(self, ct_v: internal.pyray.Vector2) -> int:
         x = ct_v.x
