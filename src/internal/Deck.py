@@ -56,7 +56,7 @@ class Deck:
         for _ in range(7):
             rand_rank = random.choice(list(range(1, 9 + 1)))
             for _ in range(0, random.randint(0, 2 + 1)):
-                self.card_to_cell(rand_rank, rand_rank)
+                self.card_to_cell(rand_rank, self.generate_card(rand_rank, rand_rank))
 
     def draw_cards(self) -> None:
         for d in self.cells:

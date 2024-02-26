@@ -8,10 +8,10 @@ pyray.set_target_fps(60)
 
 deck = Deck(CardFactory())
 log("Deck initiated")
-# deck.starter_cards()
-deck.card_to_cell(2, deck.generate_card(77, 2))
-deck.card_to_cell(2, deck.generate_card(88, 2))
-deck.card_to_cell(2, deck.generate_card(99, 2))
+deck.starter_cards()
+# deck.card_to_cell(2, deck.generate_card(77, 2))
+# deck.card_to_cell(2, deck.generate_card(88, 2))
+# deck.card_to_cell(2, deck.generate_card(99, 2))
 # deck.card_to_cell(2, deck.generate_card(7, 2))
 
 while not pyray.window_should_close():
