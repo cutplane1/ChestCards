@@ -10,6 +10,7 @@ class Deck:
         self.y_offset = 400
         self.score = 0
         self.selected_card = False
+        self.last_ct = (0, 0)
 
 
     def spawn_card_to_cell(self, cell: int, rank: str|int) -> None:
@@ -88,11 +89,16 @@ class Deck:
             if internal.pyray.check_collision_point_rec(internal.pyray.get_mouse_position(), card.rectangle):
                 rel_cards.append(card)
         try:
+            self.last_ct = (rel_cards[-1].x, rel_cards[-1].y)
             self.selected_card = rel_cards[-1]
         except IndexError:
             pass
 
     def reset_selected_card(self) -> None:
+        try:
+            self.selected_card.x, self.selected_card.y = self.last_ct
+        except AttributeError:
+            pass
         self.selected_card = False
     
     def selected_card_follow_mouse(self) -> None:
@@ -104,7 +110,10 @@ class Deck:
         if internal.pyray.is_mouse_button_pressed(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
             self.identify_card()
     
-        if internal.pyray.is_mouse_button_down(internal.pyray.MouseButton.MOUSE_BUTTON_RIGHT):
+        # if internal.pyray.is_mouse_button_down(internal.pyray.MouseButton.MOUSE_BUTTON_RIGHT):
+        #     self.reset_selected_card()
+
+        if internal.pyray.is_mouse_button_released(internal.pyray.MouseButton.MOUSE_BUTTON_LEFT):
             self.reset_selected_card()
     
         self.selected_card_follow_mouse()
