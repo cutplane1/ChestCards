@@ -14,35 +14,31 @@ deck.spawn_card_to_cell(2, 4)
 deck.spawn_card_to_cell(2, 5)
 deck.spawn_card_to_cell(2, 6)
 
-debug_button_rect = Rectangle(100, 100, 30, 30)
-debug2_button_rect = Rectangle(140, 100, 30, 30)
-debug_button_is_clicked = 0
-debug2_button_is_clicked = 0
+last_card = False
 
 while not window_should_close():
-    if debug_button_is_clicked:
-        deck.take_one_random_card()
-        deck.is_card_pack_completed()
-    if debug2_button_is_clicked:
-        pass
-
     if is_mouse_button_pressed(0):
         rel_cards = []
         for card in deck.all_cards():
             if check_collision_point_rec(get_mouse_position(), card.rectangle):
                 rel_cards.append(card)
         try:
-            print(rel_cards[-1].rank)
+            last_card = rel_cards[-1]
         except IndexError:
             pass
-        print("_________________")
+        print("-------")
     
+    if is_mouse_button_down(1):
+        last_card = False
+    
+    if last_card != False:
+        last_card.x = get_mouse_x() - 30
+        last_card.y = get_mouse_y() - 30
+
     begin_drawing()
     clear_background(BLACK)
     draw_fps(0,0)
     draw_text(str(deck.score), 200, 200, 16, WHITE)
-    debug_button_is_clicked = gui_button(debug_button_rect, "d")
-    debug2_button_is_clicked = gui_button(debug2_button_rect, "2")
     deck.draw_cards()
     end_drawing()
 
