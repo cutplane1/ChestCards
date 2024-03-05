@@ -18,6 +18,7 @@ class Card:
         self.rectangle = 0
         self.cell_temp = 0
         self.ct_temp = internal.pyray.Vector2(0, 0)
+        self.rectangle = internal.pyray.Rectangle(self.x, self.y, 50, 70)
 
         if suit.name == "Clubs" or suit.name == "Spades":
             self.color = internal.pyray.BLACK
@@ -25,7 +26,7 @@ class Card:
             self.color = internal.pyray.RED
 
     def draw(self) -> None:
-        self.rectangle = internal.pyray.Rectangle(self.x, self.y, 50, 70)
+        self.rectangle.x, self.rectangle.y = self.x, self.y
         internal.pyray.draw_rectangle_rec(self.rectangle, internal.pyray.WHITE)
         internal.pyray.draw_text(self.rank, self.x + 2, self.y + 2, 20, self.color)
         internal.pyray.draw_texture(

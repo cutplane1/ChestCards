@@ -70,13 +70,6 @@ class Deck:
                 self.cells[cell_id] = []
                 self.score += 1
 
-    # def take_one_random_card(self) -> None:
-    #     rand_rank = random.randint(1, 9)
-    #     cell = self.find_cell_by_rank(rand_rank)
-    #     if cell == None:
-    #         cell = random.choice(self.get_free_cells())
-    #     self.card_to_cell(cell, rand_rank)
-
     def get_free_cells(self) -> list[int]:
         a = []
         for cell_id in range(1, 9 + 1):
