@@ -1,4 +1,4 @@
-def log(s: any) -> None:
+def log(s) -> None:
     print("\033[92m" + "INFO: GENERAL: " + str(s) + "\033[0m")
 
 

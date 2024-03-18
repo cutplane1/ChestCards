@@ -8,5 +8,6 @@ class Suit(Enum):
     Hearts = 2
     Diamonds = 3
 
+    @staticmethod
     def random():
         return choice(list(Suit))

@@ -1,15 +1,16 @@
+from typing import Dict, List
 import internal
 
 
 class Deck:
     def __init__(self, factory: internal.CardFactory) -> None:
         self.factory = factory
-        self.cells = {}
+        self.cells: Dict[int, List[internal.Card]] = {}
         self.i = 0
         self.last_cell = 1
-        self.y_offset = 50
+        self.y_offset = 300
         self.score = 0
-        self.selected_cards = False
+        self.selected_cards: List[internal.Card] = []
         self.last_ct = internal.pyray.Vector2(0, 0)
         self.now_ct = internal.pyray.Vector2(0, 0)
         self.n_cell = 0
@@ -30,7 +31,6 @@ class Deck:
             sp.y = self.i + self.y_offset
             sp.cell_temp = cell
             self.cells[cell].append(sp)
-            # print(self.cells[cell])
         except KeyError:
             self.cells[cell] = [sp]
 
@@ -44,10 +44,7 @@ class Deck:
             for card in self.cells[cell_id]:
                 if card.rank == str(rank):
                     return cell_id
-                else:
-                    end = False
-        if end:
-            return None
+        return None
 
     def starter_cards(self) -> None:
         import random
@@ -95,14 +92,12 @@ class Deck:
             ):
                 rel_cards.append(card)
         try:
-            # ---------------------------------------------------------------------- under construct
             base_card = rel_cards[-1]
             base_card_id = self.cells[base_card.cell_temp].index(base_card)
             self.last_ct.x, self.last_ct.y = base_card.x, base_card.y
             self.selected_cards = self.cells[base_card.cell_temp][base_card_id:]
             for card in self.selected_cards:
                 card.ct_temp.x, card.ct_temp.y = card.x, card.y
-            # self.selected_cards = self.cells[base_card.cell_temp][self.cells[base_card.cell_temp:]
         except IndexError:
             pass
 
@@ -111,7 +106,7 @@ class Deck:
             self.now_ct = self.last_ct
         except AttributeError:
             pass
-        self.selected_cards = False
+        self.selected_cards = []
 
     def selected_card_follow_mouse(self) -> None:
         pass
@@ -147,5 +142,4 @@ class Deck:
                 card.y = int(self.now_ct.y) + card_id * 30
 
     def find_cell_by_ct(self, ct_v: internal.pyray.Vector2) -> int:
-        x = ct_v.x
-        return int(round(x / 70))
+        return int(round(ct_v.x / 70))
