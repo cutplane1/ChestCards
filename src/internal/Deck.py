@@ -125,14 +125,21 @@ class Deck:
         ):
             if self.selected_cards != False:
                 sc = self.selected_cards
+                try:
+                    cl_color = sc[0].color
+                    cic = self.cells[cell][-1].color
+                except IndexError:
+                    cl_color = False
+                    cic = True
                 for card in sc:
-                    if self.n_cell != cell:
+                    if self.n_cell != cell and cl_color != cic:
                         self.cells[card.cell_temp].remove(card)
                         self.reset_selected_card()
                         self.card_to_cell(cell, card)
                     else:
                         self.reset_selected_card()
                         card.x, card.y = int(card.ct_temp.x), int(card.ct_temp.y)
+
 
         if self.selected_cards != False:
             self.now_ct.x = internal.pyray.get_mouse_x() - 30
@@ -143,3 +150,4 @@ class Deck:
 
     def find_cell_by_ct(self, ct_v: internal.pyray.Vector2) -> int:
         return int(round(ct_v.x / 70))
+    
