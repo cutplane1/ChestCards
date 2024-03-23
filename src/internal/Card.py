@@ -11,7 +11,7 @@ class Card:
         texture: internal.pyray.Texture,
     ) -> None:
         self.suit = suit
-        self.rank = int(rank)
+        self.rank = str(rank)
         self.x = x
         self.y = y
         self.texture = texture

@@ -133,7 +133,7 @@ class Deck:
                     c2 = self.factory.spawn_card(internal.Suit.Diamonds, 1338, 0, 0)
                 for card in sc:
                     # checking rules
-                    if self.n_cell != cell and c1.color != c2.color and c1.rank + 1 == c2.rank:
+                    if self.n_cell != cell and c1.color != c2.color and int(c1.rank) + 1 == int(c2.rank):
                         self.cells[card.cell_temp].remove(card)
                         self.reset_selected_card()
                         self.card_to_cell(cell, card)
