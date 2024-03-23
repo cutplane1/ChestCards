@@ -11,7 +11,7 @@ class Card:
         texture: internal.pyray.Texture,
     ) -> None:
         self.suit = suit
-        self.rank = str(rank)
+        self.rank = int(rank)
         self.x = x
         self.y = y
         self.texture = texture
@@ -28,7 +28,7 @@ class Card:
     def draw(self) -> None:
         self.rectangle.x, self.rectangle.y = self.x, self.y
         internal.pyray.draw_rectangle_rec(self.rectangle, internal.pyray.WHITE)
-        internal.pyray.draw_text(self.rank, self.x + 2, self.y + 2, 20, self.color)
+        internal.pyray.draw_text(str(self.rank), self.x + 2, self.y + 2, 20, self.color)
         internal.pyray.draw_texture(
             self.texture, self.x + 30, self.y + 50, internal.pyray.WHITE
         )

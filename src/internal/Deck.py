@@ -126,13 +126,14 @@ class Deck:
             if self.selected_cards != False:
                 sc = self.selected_cards
                 try:
-                    cl_color = sc[0].color
-                    cic = self.cells[cell][-1].color
+                    c1 = sc[0]
+                    c2 = self.cells[cell][-1]
                 except IndexError:
-                    cl_color = False
-                    cic = True
+                    c1 = self.factory.spawn_card(internal.Suit.Clubs, 1337, 0, 0)
+                    c2 = self.factory.spawn_card(internal.Suit.Diamonds, 1338, 0, 0)
                 for card in sc:
-                    if self.n_cell != cell and cl_color != cic:
+                    # checking rules
+                    if self.n_cell != cell and c1.color != c2.color and c1.rank + 1 == c2.rank:
                         self.cells[card.cell_temp].remove(card)
                         self.reset_selected_card()
                         self.card_to_cell(cell, card)
